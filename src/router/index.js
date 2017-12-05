@@ -18,8 +18,10 @@ const routes = [
     path: '/back/home', name: 'backHome', component: BackHome
   }]
 
-export default new Router({
+let router = new Router({
   mode: 'history',
-  base: '/duck',
+  base: '/duck/',
   routes
 })
+
+export default router

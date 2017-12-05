@@ -21,7 +21,7 @@
 </template>
 
 <<script>
-import axios from 'axios'
+import API from '../api/api_login'
 
 export default {
   name: 'Login',
@@ -50,16 +50,15 @@ export default {
         if (valid) {
           this.loading = true;
           let params = {userName: this.account.userName, password: this.account.password};
-          axios.post(`http://localhost:8080/duck/api/v1/login`, params).then((res) => {
+          API.login(params).then((res) => {
             console.log(res);
-            console.log(res.data.result);
             that.loading = false;
             if (res) {
               // localStorage.setItem('access-user', JSON.stringify(result));
 //                that.$store.commit('SET_ROUTERS', user.permissions)
 //                that.$router.addRoutes(that.$store.getters.addRouters);
 //                that.$router.options.routes = that.$store.getters.routers;
-              that.$router.push({path: '/'});
+              that.$router.push({path: '/back/home'});
             }
           }, (err) => {
             that.loading = false;
