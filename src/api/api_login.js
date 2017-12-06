@@ -1,7 +1,7 @@
 /**
  * api_login.js
  */
-import * as API from './'
+import * as API from './index'
 
 export default {
   // 登录
