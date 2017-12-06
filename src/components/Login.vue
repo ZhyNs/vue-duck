@@ -20,7 +20,7 @@
   </div>
 </template>
 
-<<script>
+<script>
 import API from '../api/api_login'
 
 export default {
