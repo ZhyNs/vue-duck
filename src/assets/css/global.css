@@ -22,3 +22,8 @@ a:hover {
 a:active {
     text-decoration: none;
 }
+
+/* Element-UI */
+.el-table th {
+    text-align: center;
+}
