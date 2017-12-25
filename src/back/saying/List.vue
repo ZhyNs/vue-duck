@@ -14,20 +14,26 @@
     </el-row>
 
     <el-table :data="sayingList" stripe style="width: 100%;margin-top: 1rem;">
-      <el-table-column prop="type" label="类型" :span="8"></el-table-column>
+      <el-table-column label="类型" :span="8">
+        <template slot-scope="scope">
+          <span v-if="scope.row.type == 'A'">名言</span>
+          <span v-else-if="scope.row.type == 'B'">经典</span>
+          <span v-else-if="scope.row.type == 'C'">幽默</span>
+        </template>
+      </el-table-column>
       <el-table-column prop="content" label="经典语录" :span="8"></el-table-column>
       <el-table-column prop="sayer" label="说者" :span="8"></el-table-column>
     </el-table>
 
     <el-dialog title="添加框" :visible.sync="isVisible" width="45%" center>
       <el-form ref="sayingAddForm" :model="saying" label-width="80px" style="margin: auto 5%;">
-        <el-form-item label="内容" :rules="[{ required: true, message: '内容不能为空'}]">
+        <el-form-item label="内容" :rules="[{ required: true, message: '内容不能为空', trigger: 'blur'}]">
           <el-input v-model="saying.content"></el-input>
         </el-form-item>
         <el-form-item label="说者">
           <el-input v-model="saying.sayer"></el-input>
         </el-form-item>
-        <el-form-item label="类型" :rules="[{ required: true, message: '内容不能为空'}]">
+        <el-form-item label="类型" :rules="[{ required: true, message: '内容不能为空', trigger: 'blur'}]">
           <el-select v-model="saying.type" placeholder="请选择类型">
             <el-option label="名言" value="A"></el-option>
             <el-option label="经典" value="B"></el-option>
@@ -51,7 +57,7 @@ export default {
   data () {
     return {
       isVisible: false,
-      sayingList: [{"limit":0,"offset":0,"sayingId":1,"content":"失败是成功之母","sayer":"","type":"A","modifyUser":null}],
+      sayingList: [],
       keyWord: '',
       limit: 10,
       offset: 0,
@@ -78,19 +84,19 @@ export default {
         keyWord: this.keyWord
       };
 
-      that.loading = true,
-      API.queryList(params).then(function(result) {
+      that.loading = true;
+      API.queryList(params).then(res => {
         that.loading = false;
-        if(result && result.sayingList) {
-          this.total = result.total;
-          this.sayingList = result.sayingList;
+        if(res && res.result) {
+          that.total = res.data.total;
+          that.sayingList = res.data.sayingList;
         }
       }, function(error) {
         that.loading = false;
         console.log(error);
       }).catch(function(error) {
         that.loading = false;
-        this.$message.error({showClose: true, message: '请求出现异常', duration: 2000});
+        that.$message.error({showClose: true, message: '请求出现异常', duration: 2000});
       });
     },
     create: function() {
@@ -99,9 +105,9 @@ export default {
         if(valid) {
           that.loading = true;
           let params = Object.assign({}, this.saying);
-          API.create(params).then(function(data) {
+          API.create(params).then(res => {
             that.loading = false;
-            if(data && data.result) {
+            if(res && res.result) {
               that.$message.success({showClose: true, message: '新增成功', duration: 2000});
               that.$refs['sayingAddForm'].resetFields();
               that.isVisible = false;
@@ -116,6 +122,7 @@ export default {
           })
         } else {
           console.log('error submit!');
+          that.$refs['sayingAddForm'].resetFields();
           return false;
         }
       })
