@@ -25,6 +25,18 @@
       <el-table-column prop="sayer" label="说者" :span="8"></el-table-column>
     </el-table>
 
+    <div class="block" style="margin-top: 30px;">
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-sizes="[5, 10, 20, 50]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total">
+      </el-pagination>
+    </div>
+
     <el-dialog title="添加框" :visible.sync="isVisible" width="45%" center>
       <el-form ref="sayingAddForm" :model="saying" label-width="80px" style="margin: auto 5%;">
         <el-form-item label="内容" :rules="[{ required: true, message: '内容不能为空', trigger: 'blur'}]">
@@ -59,15 +71,17 @@ export default {
       isVisible: false,
       sayingList: [],
       keyWord: '',
-      limit: 10,
-      offset: 0,
-      total: 0,
       saying: {
         content: '',
         sayer: '',
         type: ''
       },
-      loading: false
+      loading: false,
+      pageSize: 10,
+      currentPage: 1,
+      limit: 10,
+      offset: 0,
+      total: 0
     }
   },
   methods: {
@@ -76,27 +90,36 @@ export default {
       this.limit = 10;
       this.search();
     },
+    handleSizeChange(val) {
+      this.pageSize = val;
+      this.offset = (this.currentPage - 1) * this.pageSize;
+      this.search();
+    },
+    handleCurrentChange(val) {
+      this.currentPage = val;
+      this.offset = (val - 1) * this.pageSize;
+      this.search();
+    },
     search: function() {
       let that = this;
       let params = {
-        limit: 10,
-        offset: this.offset,
-        keyWord: this.keyWord
+        limit: that.pageSize,
+        offset: that.offset,
+        keyWord: that.keyWord
       };
 
       that.loading = true;
       API.queryList(params).then(res => {
         that.loading = false;
         if(res && res.result) {
-          that.total = res.data.total;
-          that.sayingList = res.data.sayingList;
+          that.total = res.total;
+          that.sayingList = res.sayingList;
         }
-      }, function(error) {
+      }, function(err) {
         that.loading = false;
-        console.log(error);
-      }).catch(function(error) {
+      }).catch(function(err) {
         that.loading = false;
-        that.$message.error({showClose: true, message: '请求出现异常', duration: 2000});
+        that.$message.error({showClose: true, message: '请求出现异常：' + err , duration: 2000});
       });
     },
     create: function() {
@@ -113,15 +136,14 @@ export default {
               that.isVisible = false;
               that.search();
             }
-          },function(error) {
+          },function(err) {
             that.loading = false;
-            that.$message.error({showClose: true, message: error.toString(), duration: 2000});
-          }).catch(function(error) {
+            that.$message.error({showClose: true, message: err, duration: 2000});
+          }).catch(function(err) {
             that.loading = false;
-            that.$message.error({showClose: true, message: '请求出现异常', duration: 2000});
+            that.$message.error({showClose: true, message: err, duration: 2000});
           })
         } else {
-          console.log('error submit!');
           that.$refs['sayingAddForm'].resetFields();
           return false;
         }

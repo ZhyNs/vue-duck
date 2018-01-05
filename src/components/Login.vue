@@ -54,10 +54,6 @@ export default {
             console.log(res);
             that.loading = false;
             if (res) {
-              // localStorage.setItem('access-user', JSON.stringify(result));
-//                that.$store.commit('SET_ROUTERS', user.permissions)
-//                that.$router.addRoutes(that.$store.getters.addRouters);
-//                that.$router.options.routes = that.$store.getters.routers;
               that.$router.push({path: '/back/home'});
             }
           }, (err) => {
