@@ -16,5 +16,8 @@ export default {
   },
   delete: params => {
     return API.POST('api/v1/back/saying/delete', params)
+  },
+  get: (params) => {
+    return API.POST('api/v1/back/saying/get', params)
   }
 }

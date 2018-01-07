@@ -1,8 +1,6 @@
 <template>
   <el-container class="main">
-      <el-header>
-          head
-      </el-header>
+      <el-header>{{ head }}</el-header>
       <el-container style="width: 1200px; margin: 0 auto; height: 100vh; padding-top: 8rem; background-color: #fff;">
           <el-aside style="width: 200px;height: 100%; overflow: hidden;">
               <BackNav></BackNav>
@@ -19,10 +17,29 @@
 <script>
 import BackNav from '@/back/Nav'
 
+import API_SAY from '@/api/api_saying'
+
 export default {
   name: 'BackHome',
   components: {
-      BackNav
+    BackNav
+  },
+  data() {
+    return {
+      head: ''
+    }
+  },
+  mounted() {
+    this.getSaying();
+  },
+  methods: {
+    getSaying: function() {
+      API_SAY.get().then(res => {
+        if(res && res.result) {
+          this.head = res.content;
+        }
+      });
+    }
   }
 }
 </script>
@@ -42,6 +59,8 @@ export default {
     line-height: 8rem;
     text-align: center;
     position: fixed;
+    font-size: 16px;
+    letter-spacing: 2px;
     background-color: #fff;
     border-bottom: solid 1px #e6e6e6;
 }
