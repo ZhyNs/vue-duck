@@ -10,5 +10,11 @@ export default {
   },
   create: params => {
     return API.POST('api/v1/back/saying/create', params)
+  },
+  edit: params => {
+    return API.POST('api/v1/back/saying/edit', params)
+  },
+  delete: params => {
+    return API.POST('api/v1/back/saying/delete', params)
   }
 }

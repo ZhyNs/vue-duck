@@ -10,20 +10,22 @@ Vue.use(Router)
 
 const routes = [
   {
-    path: '/', name: 'index', component: Index
+    path: '/', redirect: '/index'
   },{
     path: '/index', name: 'index', component: Index
+  },{
+    path: '/back', redirect: '/back/index'
   },{
     path: '/back/index', name: 'backIndex', component: BackIndex
   },{
     path: '/back/home', name: 'backHome', component: BackHome
   },{
-    path: '/back/',
+    path: '/back',
     component: BackHome,
-    name: '经典语录',
+    name: '后台管理',
     menuShow: true,
     children: [{
-      path: '/back/saying', component: BackSaying, name: '语录列表', menuShow: true
+      path: '/back/saying', component: BackSaying, name: '经典语录', menuShow: true
     }]
   }]
 

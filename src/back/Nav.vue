@@ -22,7 +22,7 @@
     <el-menu-item index="3">
         <span slot="title">留言板</span>
     </el-menu-item>
-    <router-link to="saying">
+    <router-link to="/back/saying">
     <el-menu-item index="3">
         <span slot="title">经典语录</span>
     </el-menu-item>
