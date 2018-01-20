@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import HelloWorld from '@/components/HelloWorld'
 import Index from '@/blog/Index'
 import BackIndex from '@/back/Index'
 import BackHome from '@/back/Home'
+import BackBlog from '@/back/blog/List'
+import BackBlogEdit from '@/back/blog/Edit'
 import BackSaying from '@/back/saying/List'
 
 Vue.use(Router)
@@ -22,11 +23,13 @@ const routes = [
   },{
     path: '/back',
     component: BackHome,
-    name: '后台管理',
+    name: 'back',
     menuShow: true,
-    children: [{
-      path: '/back/saying', component: BackSaying, name: '经典语录', menuShow: true
-    }]
+    children: [
+      { path: 'blog', component: BackBlog, name: 'backBlog' },
+      { path: '/back/blog/edit', components: { home_container: BackBlogEdit }, name: 'backBlogEdit' },
+      { path: 'saying', component: BackSaying, name: 'backSaying' }
+    ]
   }]
 
 let router = new Router({

@@ -51,7 +51,6 @@ export default {
           this.loading = true;
           let params = {userName: this.account.userName, password: this.account.password};
           API.login(params).then((res) => {
-            console.log(res);
             that.loading = false;
             if (res) {
               that.$router.push({path: '/back/home'});

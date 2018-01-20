@@ -1,11 +1,10 @@
 <template>
   <el-container class="main">
       <el-header>{{ head }}</el-header>
-      <el-container style="width: 1200px; margin: 0 auto; height: 100vh; padding-top: 8rem; background-color: #fff;">
-          <el-aside style="width: 200px;height: 100%; overflow: hidden;">
-              <BackNav></BackNav>
-          </el-aside>
-          <el-main>
+      <el-container style="width: 100%; margin: 0 auto; height: 100vh; padding-top: 8rem; background-color: #fff;">
+        <BackNav v-show="this.$store.state.backHomeNavShow"></BackNav>
+        <router-view name="home_container"></router-view>
+          <el-main v-show="this.$store.state.backHomeNavShow">
             <transition name="fade" mode="out-in">
               <router-view></router-view>
             </transition>
@@ -39,6 +38,15 @@ export default {
           this.head = res.content;
         }
       });
+    }
+  },
+  watch: {
+    $route(to, from) {
+      if(to.path.indexOf('/back/blog/edit') > -1) {
+        this.$store.commit('backHomeNavShow', false);
+      } else {
+        this.$store.commit('backHomeNavShow', true);
+      }
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding-right: 30px;">
     <el-row style="margin-top: 3rem;">
       <el-col :span="8">
         <el-input placeholder="请输入查询内容" v-model="query" clearable></el-input>
@@ -36,7 +36,7 @@
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         :current-page="currentPage"
-        :page-sizes="[5, 10, 20, 50]"
+        :page-sizes="[10, 20, 50]"
         :page-size="pageSize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total">
@@ -96,16 +96,6 @@ export default {
       limit: 10,
       offset: 0,
       total: 0
-    }
-  },
-  mounted() {
-    this.initSearch();
-  },
-  watch: {
-    isVisible(newValue, oldValue) {
-      if(!newValue) {
-        this.$refs['sayingForm'].resetFields();
-      }
     }
   },
   methods: {
@@ -244,6 +234,16 @@ export default {
         that.loading = false;
         that.$message.error({showClose: true, message: err, duration: 2000});
       })
+    }
+  },
+  mounted() {
+    this.initSearch();
+  },
+  watch: {
+    isVisible(newValue, oldValue) {
+      if(!newValue) {
+        this.$refs['sayingForm'].resetFields();
+      }
     }
   }
 }
